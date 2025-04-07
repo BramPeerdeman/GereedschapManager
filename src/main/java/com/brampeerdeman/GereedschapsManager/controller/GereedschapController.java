@@ -5,7 +5,9 @@ import com.brampeerdeman.GereedschapsManager.model.Gereedschap;
 import com.brampeerdeman.GereedschapsManager.repository.GereedschapRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -55,5 +57,21 @@ public class GereedschapController
         gereedschapRepository.deleteById(id);
 
         return "Gereedschap with id " + id + " was deleted successfully";
+    }
+
+    @PostMapping("/upload")
+    public String handleFileUpload(@RequestParam("jsonFile") MultipartFile file) throws IOException {
+
+            // Read file content as string
+            String jsonContent = new String(file.getBytes());
+
+            // Optionally, you can process the JSON content here (e.g., deserialize into a model)
+            // If you want to map the JSON into Java objects, use Jackson's ObjectMapper
+            // For example: ObjectMapper objectMapper = new ObjectMapper();
+            // Gereedschap gereedschap = objectMapper.readValue(jsonContent, Gereedschap.class);
+
+            // Logic for saving the data to the database goes here (if needed)
+
+            return "File uploaded successfully!";
     }
 }
