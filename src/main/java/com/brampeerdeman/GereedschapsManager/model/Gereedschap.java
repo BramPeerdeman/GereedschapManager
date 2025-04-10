@@ -1,8 +1,7 @@
 package com.brampeerdeman.GereedschapsManager.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
@@ -13,8 +12,28 @@ public class Gereedschap
     @GeneratedValue
     private long id;
     private String name;
-    private String location;
-    private boolean loaned;
+
+    @ManyToOne
+    @JoinColumn(name = "location_id")
+    private Locatie location;
+
+    private Boolean loaned = Boolean.FALSE;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "loaned_status_change")
+    private Date loanedStatusChange;
+
+    @ManyToOne
+    @JoinColumn(name = "gebruiker_id")
+    private Gebruiker gebruiker;
+
+    public Gebruiker getGebruiker() {
+        return gebruiker;
+    }
+
+    public void setGebruiker(Gebruiker gebruiker) {
+        this.gebruiker = gebruiker;
+    }
 
     public long getId() {
         return id;
@@ -32,11 +51,11 @@ public class Gereedschap
         this.name = name;
     }
 
-    public String getLocation() {
+    public Locatie getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(Locatie location) {
         this.location = location;
     }
 
@@ -46,5 +65,14 @@ public class Gereedschap
 
     public void setLoaned(boolean loaned) {
         this.loaned = loaned;
+        this.loanedStatusChange = new Date();
+    }
+
+    public Date getLoanedStatusChange() {
+        return loanedStatusChange;
+    }
+
+    public void setLoanedStatusChange(Date loanedStatusChange) {
+        this.loanedStatusChange = loanedStatusChange;
     }
 }

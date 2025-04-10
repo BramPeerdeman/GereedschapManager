@@ -3,6 +3,7 @@ package com.brampeerdeman.GereedschapsManager.controller;
 import com.brampeerdeman.GereedschapsManager.exception.GereedschapNotFoundException;
 import com.brampeerdeman.GereedschapsManager.model.Gereedschap;
 import com.brampeerdeman.GereedschapsManager.repository.GereedschapRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,6 +44,7 @@ public class GereedschapController
                 .map(gereedschap -> {
                     gereedschap.setName(newGereedschap.getName());
                     gereedschap.setLocation(newGereedschap.getLocation());
+                    gereedschap.setGebruiker(newGereedschap.getGebruiker());
                     return gereedschapRepository.save(gereedschap);
                 }).orElseThrow(() -> new GereedschapNotFoundException(id));
     }
@@ -60,18 +62,24 @@ public class GereedschapController
     }
 
     @PostMapping("/upload")
-    public String handleFileUpload(@RequestParam("jsonFile") MultipartFile file) throws IOException {
+    public String handleFileUpload(@RequestParam("jsonFile") MultipartFile file) throws IOException
+    {
+        String jsonContent = new String(file.getBytes());
 
-            // Read file content as string
-            String jsonContent = new String(file.getBytes());
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Gereedschap> gereedschappen = objectMapper.readValue(jsonContent, objectMapper.getTypeFactory().constructCollectionType(List.class, Gereedschap.class));
 
-            // Optionally, you can process the JSON content here (e.g., deserialize into a model)
-            // If you want to map the JSON into Java objects, use Jackson's ObjectMapper
-            // For example: ObjectMapper objectMapper = new ObjectMapper();
-            // Gereedschap gereedschap = objectMapper.readValue(jsonContent, Gereedschap.class);
+        gereedschapRepository.saveAll(gereedschappen);
 
-            // Logic for saving the data to the database goes here (if needed)
+        return "File uploaded and tools added successfully!";
+    }
 
-            return "File uploaded successfully!";
+    @PutMapping("/gereedschap/{id}/loan-status")
+    public Gereedschap changeLoanStatus(@PathVariable Long id, @RequestParam boolean loaned)
+    {
+        return gereedschapRepository.findById(id).map(gereedschap -> {
+            gereedschap.setLoaned(loaned);
+            return gereedschapRepository.save(gereedschap);
+        }).orElseThrow(() -> new GereedschapNotFoundException(id));
     }
 }
