@@ -1,7 +1,6 @@
 package com.brampeerdeman.GereedschapsManager.security;
 
 import com.brampeerdeman.GereedschapsManager.model.Gebruiker;
-import com.brampeerdeman.GereedschapsManager.repository.GebruikersPrincipal;
 import com.brampeerdeman.GereedschapsManager.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

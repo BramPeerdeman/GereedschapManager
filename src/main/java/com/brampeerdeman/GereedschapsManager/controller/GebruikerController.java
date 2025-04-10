@@ -55,20 +55,20 @@ public class GebruikerController
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest, HttpSession session) {
+    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest, HttpSession session)
+    {
         try {
-            // Validate the credentials using your service
             boolean isAuthenticated = gebruikerService.authenticate(loginRequest.getGebruikersnaam(), loginRequest.getWachtwoord());
 
-            // If authenticated, set the session attribute
             if (isAuthenticated) {
                 session.setAttribute("gebruikersnaam", loginRequest.getGebruikersnaam());
                 return ResponseEntity.ok("Login was successful!");
-            } else {
+            } else
+            {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
             }
-        } catch (Exception e) {
-            // Handle any unexpected errors
+        } catch (Exception e)
+        {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unknown error occurred");
         }
     }
