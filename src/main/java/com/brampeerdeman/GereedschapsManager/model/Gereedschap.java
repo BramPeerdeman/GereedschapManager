@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-public class Gereedschap
+public abstract class Gereedschap
 {
     @Id
     @GeneratedValue
@@ -26,6 +26,9 @@ public class Gereedschap
     @ManyToOne
     @JoinColumn(name = "gebruiker_id")
     private Gebruiker gebruiker;
+
+    public abstract String gebruiksInstructies();
+    public abstract boolean vereistVeiligheidscheck();
 
     public Gebruiker getGebruiker() {
         return gebruiker;

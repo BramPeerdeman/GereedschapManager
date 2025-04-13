@@ -20,6 +20,21 @@ public class Gebruiker
     @JsonProperty("password")
     private String wachtwoord;
 
+    public String getRol()
+    {
+        return null;
+    }
+
+    public boolean magGereedschapToevoegen()
+    {
+        return false;
+    }
+
+    public boolean magGebruikerBeheren()
+    {
+        return false;
+    }
+
     public String getGebruikersnaam() {
         return gebruikersnaam;
     }
