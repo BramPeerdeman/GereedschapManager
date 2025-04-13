@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Gebruiker
+public abstract class Gebruiker
 {
     @Id
     @GeneratedValue
@@ -20,10 +20,7 @@ public class Gebruiker
     @JsonProperty("password")
     private String wachtwoord;
 
-    public String getRol()
-    {
-        return null;
-    }
+    public abstract String getRol();
 
     public boolean magGereedschapToevoegen()
     {
