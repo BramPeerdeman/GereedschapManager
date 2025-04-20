@@ -15,6 +15,11 @@ import lombok.NoArgsConstructor;
 @Data
 public class LoginRequest
 {
+    public LoginRequest(String gebruikersnaam, String wachtwoord)
+    {
+        this.gebruikersnaam = gebruikersnaam;
+        this.wachtwoord = wachtwoord;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,4 +32,5 @@ public class LoginRequest
     private String wachtwoord;
 
     private String passwordHash;
+
 }

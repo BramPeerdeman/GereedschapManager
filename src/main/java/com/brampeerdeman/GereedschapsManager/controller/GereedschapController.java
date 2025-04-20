@@ -1,7 +1,9 @@
 package com.brampeerdeman.GereedschapsManager.controller;
 
 import com.brampeerdeman.GereedschapsManager.exception.GereedschapNotFoundException;
+import com.brampeerdeman.GereedschapsManager.model.ElektrischGereedschap;
 import com.brampeerdeman.GereedschapsManager.model.Gereedschap;
+import com.brampeerdeman.GereedschapsManager.model.HandGereedschap;
 import com.brampeerdeman.GereedschapsManager.repository.GereedschapRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,14 @@ public class GereedschapController
     @PostMapping("/gereedschap")
     Gereedschap newGereedschap(@RequestBody Gereedschap newGereedschap)
     {
+        if ("elektrisch".equals(newGereedschap.getType())) {
+            newGereedschap.setGebruiksInstructies("Draag gehoorbescherming en gebruik een veiligheidsbril.");
+            newGereedschap.setVereistVeiligheidscheck(true);
+        } else if ("hand".equals(newGereedschap.getType())) {
+            newGereedschap.setGebruiksInstructies("Gebruik altijd het gereedschap volgens de handleiding.");
+            newGereedschap.setVereistVeiligheidscheck(false);
+        }
+
         return gereedschapRepository.save(newGereedschap);
     }
 

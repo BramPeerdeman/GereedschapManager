@@ -1,7 +1,7 @@
 package com.brampeerdeman.GereedschapsManager.service;
 
 import com.brampeerdeman.GereedschapsManager.model.Gebruiker;
-import com.brampeerdeman.GereedschapsManager.repository.UserRepository;
+import com.brampeerdeman.GereedschapsManager.repository.GebruikerRepository;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,44 +13,44 @@ import java.util.List;
 public class GebruikerService
 {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final UserRepository userRepository;
+    private final GebruikerRepository gebruikerRepository;
 
-    public GebruikerService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder)
+    public GebruikerService(GebruikerRepository gebruikerRepository, BCryptPasswordEncoder bCryptPasswordEncoder)
     {
-        this.userRepository = userRepository;
+        this.gebruikerRepository = gebruikerRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     public List<Gebruiker> getGebruikers()
     {
-        return userRepository.findAll();
+        return gebruikerRepository.findAll();
     }
 
     public Gebruiker getGebruiker(Integer id)
     {
-        return userRepository.findById(id).orElse(null);
+        return gebruikerRepository.findById(id).orElse(null);
     }
 
     public Gebruiker addGebruiker(Gebruiker gebruiker)
     {
         gebruiker.setWachtwoord(bCryptPasswordEncoder.encode(gebruiker.getWachtwoord()));
-        return userRepository.save(gebruiker);
+        return gebruikerRepository.save(gebruiker);
     }
 
     public Gebruiker updateGebruiker(Gebruiker gebruiker)
     {
         gebruiker.setWachtwoord(bCryptPasswordEncoder.encode(gebruiker.getWachtwoord()));
-        return userRepository.save(gebruiker);
+        return gebruikerRepository.save(gebruiker);
     }
 
     public void deleteGebruiker(Integer id)
     {
-        userRepository.deleteById(id);
+        gebruikerRepository.deleteById(id);
     }
 
     public boolean authenticate(String gebruikersnaam, String wachtwoord)
     {
-        Gebruiker gebruiker = userRepository.findByGebruikersnaam(gebruikersnaam);
+        Gebruiker gebruiker = gebruikerRepository.findByGebruikersnaam(gebruikersnaam);
         if (gebruiker == null)
         {
             throw new UsernameNotFoundException("User does not exist in the database");
