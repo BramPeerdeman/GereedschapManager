@@ -28,14 +28,8 @@ public class GebruikerControllerTest
     @Test
     void testAuthenticateSuccess()
     {
-        Gebruiker gebruiker = new Gebruiker()
-        {
-            @Override
-            public String getRol()
-            {
-                return "";
-            }
-        };
+        Gebruiker gebruiker = new Gebruiker();
+
         gebruiker.setGebruikersnaam("testUser");
         gebruiker.setWachtwoord(bCryptPasswordEncoder.encode("password"));
 
@@ -75,14 +69,8 @@ public class GebruikerControllerTest
     @Test
     void testAuthenticateFailure_WrongPassword()
     {
-        Gebruiker gebruiker = new Gebruiker()
-        {
-            @Override
-            public String getRol()
-            {
-                return "";
-            }
-        };
+        Gebruiker gebruiker = new Gebruiker();
+
         gebruiker.setGebruikersnaam("testUser");
         gebruiker.setWachtwoord(bCryptPasswordEncoder.encode("correctPassword"));
 
