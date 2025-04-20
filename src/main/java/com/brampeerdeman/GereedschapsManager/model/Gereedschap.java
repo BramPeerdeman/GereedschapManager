@@ -1,12 +1,24 @@
 package com.brampeerdeman.GereedschapsManager.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
 
 import java.util.Date;
 
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type"
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = HandGereedschap.class, name = "hand"),
+        @JsonSubTypes.Type(value = ElektrischGereedschap.class, name = "elektrisch")
+})
 @Entity
-public class Gereedschap
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
+public abstract class Gereedschap
 {
     @Id
     @GeneratedValue
@@ -26,6 +38,31 @@ public class Gereedschap
     @ManyToOne
     @JoinColumn(name = "gebruiker_id")
     private Gebruiker gebruiker;
+
+    private String gebruiksInstructies;
+    private boolean vereistVeiligheidscheck;
+
+    @Column(insertable = false, updatable = false)
+    private String type;
+
+    public abstract String gebruiksInstructies();
+    public abstract boolean vereistVeiligheidscheck();
+
+    public String getGebruiksInstructies() {
+        return gebruiksInstructies;
+    }
+
+    public void setGebruiksInstructies(String gebruiksInstructies) {
+        this.gebruiksInstructies = gebruiksInstructies;
+    }
+
+    public boolean isVereistVeiligheidscheck() {
+        return vereistVeiligheidscheck;
+    }
+
+    public void setVereistVeiligheidscheck(boolean vereistVeiligheidscheck) {
+        this.vereistVeiligheidscheck = vereistVeiligheidscheck;
+    }
 
     public Gebruiker getGebruiker() {
         return gebruiker;
@@ -74,5 +111,13 @@ public class Gereedschap
 
     public void setLoanedStatusChange(Date loanedStatusChange) {
         this.loanedStatusChange = loanedStatusChange;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
